@@ -1,0 +1,3 @@
+GRANT INSERT, UPDATE, DELETE ON public.user_roles TO authenticated;
+DROP POLICY "Public can submit tour inquiries" ON public.inquiries;
+CREATE POLICY "Public can submit tour inquiries" ON public.inquiries FOR INSERT TO anon WITH CHECK (char_length(name) BETWEEN 2 AND 140 AND char_length(email) BETWEEN 5 AND 254 AND char_length(service) BETWEEN 2 AND 160 AND party_size BETWEEN 1 AND 30 AND status = 'new' AND source = 'website');
