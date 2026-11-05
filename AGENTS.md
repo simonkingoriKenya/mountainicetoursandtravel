@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Application architecture
+- Keep customer services and operations data behind a typed provider interface that selects local mock data, Lovable Cloud, or a `/api/*` Worker adapter by configuration; this preserves portable Cloudflare/Replit handoff without changing the UI.
