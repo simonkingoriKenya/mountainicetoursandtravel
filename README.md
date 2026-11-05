@@ -1,6 +1,6 @@
 # MountainIceMikes Tours and Travel
 
-Build the complete web platform and tour operations system for MountainIceMikes Tours & Travel (mountainizemikes.com), built under Migradia Limited.
+Build the complete web platform and tour operations system for MountainIceMikes Tours & Travel (mountainicemikes.com), built under Migradia Limited.
 
 Architecture & Handoff Readiness:
 - Monorepo-friendly architecture prepared for Cloudflare Pages, D1 (SQLite), R2 (object storage), KV (cache/rates), and Replit backend development.
