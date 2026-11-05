@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793869527331,
+      "tag": "0000_create_mountainicemikes_operations_data",
+      "breakpoints": true
+    }
+  ]
 }

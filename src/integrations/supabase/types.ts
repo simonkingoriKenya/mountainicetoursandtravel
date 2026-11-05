@@ -14,16 +14,308 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      crew_assignments: {
+        Row: {
+          advance_usd: number
+          created_at: string
+          daily_rate_usd: number
+          days_worked: number
+          gate_balance_usd: number
+          id: string
+          name: string
+          payout_status: string
+          role: string
+          trip_id: string | null
+        }
+        Insert: {
+          advance_usd?: number
+          created_at?: string
+          daily_rate_usd?: number
+          days_worked?: number
+          gate_balance_usd?: number
+          id?: string
+          name: string
+          payout_status?: string
+          role?: string
+          trip_id?: string | null
+        }
+        Update: {
+          advance_usd?: number
+          created_at?: string
+          daily_rate_usd?: number
+          days_worked?: number
+          gate_balance_usd?: number
+          id?: string
+          name?: string
+          payout_status?: string
+          role?: string
+          trip_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_assignments_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          created_at: string
+          document_type: string
+          id: string
+          label: string
+          storage_path: string
+          trip_id: string | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_type?: string
+          id?: string
+          label: string
+          storage_path: string
+          trip_id?: string | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_type?: string
+          id?: string
+          label?: string
+          storage_path?: string
+          trip_id?: string | null
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fleet_inventory: {
+        Row: {
+          available: number
+          daily_rate_usd: number
+          features: string
+          id: string
+          quantity: number
+          service_mode: string
+          updated_at: string
+          vehicle: string
+          vehicle_type: string
+        }
+        Insert: {
+          available?: number
+          daily_rate_usd?: number
+          features?: string
+          id?: string
+          quantity?: number
+          service_mode?: string
+          updated_at?: string
+          vehicle: string
+          vehicle_type?: string
+        }
+        Update: {
+          available?: number
+          daily_rate_usd?: number
+          features?: string
+          id?: string
+          quantity?: number
+          service_mode?: string
+          updated_at?: string
+          vehicle?: string
+          vehicle_type?: string
+        }
+        Relationships: []
+      }
+      gear_inventory: {
+        Row: {
+          available: number
+          category: string
+          condition: string
+          daily_rate_usd: number
+          id: string
+          name: string
+          quantity: number
+          updated_at: string
+        }
+        Insert: {
+          available?: number
+          category?: string
+          condition?: string
+          daily_rate_usd?: number
+          id?: string
+          name: string
+          quantity?: number
+          updated_at?: string
+        }
+        Update: {
+          available?: number
+          category?: string
+          condition?: string
+          daily_rate_usd?: number
+          id?: string
+          name?: string
+          quantity?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          nationality: string
+          party_size: number
+          phone: string
+          service: string
+          source: string
+          status: string
+          travel_dates: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message?: string
+          name: string
+          nationality?: string
+          party_size?: number
+          phone?: string
+          service: string
+          source?: string
+          status?: string
+          travel_dates?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          nationality?: string
+          party_size?: number
+          phone?: string
+          service?: string
+          source?: string
+          status?: string
+          travel_dates?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          email: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          email?: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          email?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      trips: {
+        Row: {
+          capacity: number
+          created_at: string
+          destination: string
+          end_date: string | null
+          guest_count: number
+          id: string
+          lead_guide: string
+          name: string
+          notes: string
+          start_date: string | null
+          status: string
+          trip_code: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string
+          destination: string
+          end_date?: string | null
+          guest_count?: number
+          id?: string
+          lead_guide?: string
+          name: string
+          notes?: string
+          start_date?: string | null
+          status?: string
+          trip_code: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          destination?: string
+          end_date?: string | null
+          guest_count?: number
+          id?: string
+          lead_guide?: string
+          name?: string
+          notes?: string
+          start_date?: string | null
+          status?: string
+          trip_code?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Returns: boolean
+      }
+      is_operations_staff: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "ops_manager" | "guide" | "finance"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +442,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "ops_manager", "guide", "finance"],
+    },
   },
 } as const
