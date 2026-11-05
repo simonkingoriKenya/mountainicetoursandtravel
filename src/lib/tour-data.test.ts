@@ -21,8 +21,10 @@ describe("user-stated tour rates and pricing controls", () => {
   });
 
   it("shows resident and non-resident park fee treatment without inventing fees", () => {
-    expect(tourEstimate(tours[0], 1, "USD", "resident").label).toContain("Resident / citizen");
-    expect(tourEstimate(tours[0], 1, "USD", "resident").label).toContain("park fees checked separately");
-    expect(tourEstimate(tours[0], 1, "USD", "non_resident").label).toContain("Non-resident");
+    const mountain = tours.find((tour) => tour.slug === "sirimon-chogoria");
+    if (!mountain) throw new Error("The Sirimon–Chogoria route must exist.");
+    expect(tourEstimate(mountain, 1, "USD", "resident").label).toContain("Resident / citizen");
+    expect(tourEstimate(mountain, 1, "USD", "resident").label).toContain("park fees checked separately");
+    expect(tourEstimate(mountain, 1, "USD", "non_resident").label).toContain("Non-resident");
   });
 });

@@ -9,10 +9,6 @@ import type { Database } from "@/integrations/supabase/types";
 import { APP_ROLES, type AppRole } from "@/lib/roles";
 
 export const Route = createFileRoute("/ops")({
-  beforeLoad: async ({ location }) => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) throw redirect({ to: "/ops", search: { login: "required", redirect: location.href } });
-  },
   head: () => ({
     meta: [
       { title: "Operations Desk | MountainIceMikes Tours and Travel" },
