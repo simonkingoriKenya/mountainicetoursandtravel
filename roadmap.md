@@ -1,6 +1,8 @@
 # Roadmap
-- [x] Build MountainIceMikes Tours and Travel public booking/information experience and operations portal.
-- [ ] Use the exact company name “MountainIceMikes Tours and Travel” consistently; remove incorrect “Expeditions” references.
-- [x] Add Cloud-backed staff authentication, profile records, protected role checks, and operations data.
-- [x] Add mock-first typed service layer, interoperable schema and representative data for handoff.
-- [ ] Verify route metadata, build diagnostics, and key public/admin flows.
+- [ ] Repair existing preview/type errors without regressing working tours or operations features.
+- [ ] Replace homepage navigation with working, mobile-first dropdowns for Mountains, Safaris, Field Services, and About.
+- [ ] Add an About Us page and useful destination pages for the requested mountain and safari menu entries; preserve factual pricing and leave unspecified details unpriced.
+- [ ] Refresh the logo and favicon after confirming the final logo direction.
+- [ ] Refine the public site’s image-led, mountain-travel typography and visual rhythm; ensure mobile and desktop layouts work.
+- [ ] Review operations dashboard usability while retaining the existing staff-access protections and data behavior.
+- [ ] Verify route metadata, builds, responsive navigation, key links, and public enquiry flow.
