@@ -46,9 +46,11 @@ function HomePage() {
   }, []);
 
   const featuredTours = useMemo(() => tours.filter((tour) => activeService === "All journeys" || tour.service === activeService), [activeService]);
-  const curated = tours.find((tour) => tour.slug === "sirimon-chogoria") ?? tours[0];
-  const estimate = tourEstimate(curated, groupSize, currency, visitorClass);
-  const gear = dayRates[selectedGear] ?? dayRates[0];
+  const curated = tours.find((tour) => tour.slug === "sirimon-chogoria");
+  const estimate = curated
+    ? tourEstimate(curated, groupSize, currency, visitorClass)
+    : { amount: "—", label: "Park fees checked separately" };
+  const gear = dayRates[selectedGear] ?? { name: "Equipment", rateUsd: 0, stock: 0 };
 
   function alertToast(message: string) {
     setToast(message);

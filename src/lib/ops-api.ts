@@ -14,7 +14,7 @@ export interface OpsApi {
   uploadDocument(file: File, tripId: string | null, type: string): Promise<void>;
 }
 
-const storedMock = typeof import.meta.env.VITE_USE_MOCK === "string" ? import.meta.env.VITE_USE_MOCK : "true";
+const storedMock = typeof import.meta.env["VITE_USE_MOCK"] === "string" ? import.meta.env["VITE_USE_MOCK"] : "true";
 export const isMockMode = storedMock !== "false";
 
 function loadLocalRows(): Row<"inquiries">[] {
@@ -31,7 +31,7 @@ function mockId() { return typeof crypto !== "undefined" && "randomUUID" in cryp
 export const mockOpsApi: OpsApi = {
   async list(table) {
     const data = { inquiries: [...loadLocalRows(), ...sampleInquiries], trips: sampleTrips, crew_assignments: sampleCrew, gear_inventory: sampleGear, fleet_inventory: sampleFleet, documents: [] };
-    return structuredClone(data[table]) as Row<typeof table>[];
+    return structuredClone(data[table]) as unknown as Row<typeof table>[];
   },
   async updateInquiryStatus(id, status) {
     const rows = loadLocalRows();
@@ -41,7 +41,18 @@ export const mockOpsApi: OpsApi = {
   async updateTripStatus() {},
   async createInquiry(row) {
     const inquiries = loadLocalRows();
-    inquiries.unshift({ ...row, id: mockId(), created_at: new Date().toISOString(), status: "new" });
+    inquiries.unshift({
+      ...row,
+      id: mockId(),
+      created_at: new Date().toISOString(),
+      status: "new",
+      phone: row.phone ?? "",
+      travel_dates: row.travel_dates ?? "",
+      nationality: row.nationality ?? "non_resident",
+      party_size: row.party_size ?? 1,
+      source: row.source ?? "website",
+      message: row.message ?? "",
+    });
     saveLocalRows(inquiries);
   },
   async updateGearAvailable() {},
@@ -53,7 +64,7 @@ export const cloudOpsApi: OpsApi = {
   async list(table) {
     const { data, error } = await supabase.from(table).select("*").order("created_at", { ascending: false }).limit(250);
     if (error) throw error;
-    return (data ?? []) as Row<typeof table>[];
+    return (data ?? []) as unknown as Row<typeof table>[];
   },
   async updateInquiryStatus(id, status) {
     const { error } = await supabase.from("inquiries").update({ status }).eq("id", id);
@@ -111,6 +122,6 @@ async function sendWorker(path: OpsTable, method: "POST" | "PATCH", data: unknow
 
 export function getOpsApi(): OpsApi {
   if (isMockMode) return mockOpsApi;
-  const provider = import.meta.env.VITE_API_PROVIDER;
+  const provider = import.meta.env["VITE_API_PROVIDER"];
   return provider === "worker" ? workerOpsApi : cloudOpsApi;
 }
