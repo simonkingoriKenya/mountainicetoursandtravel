@@ -42,7 +42,9 @@ export const mockOpsApi: OpsApi = {
   async createInquiry(row) {
     const inquiries = loadLocalRows();
     inquiries.unshift({
-      ...row,
+      name: row.name ?? "",
+      email: row.email ?? "",
+      service: row.service ?? "",
       id: mockId(),
       created_at: new Date().toISOString(),
       status: "new",
