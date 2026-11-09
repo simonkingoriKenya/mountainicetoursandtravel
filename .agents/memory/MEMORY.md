@@ -1,0 +1,1 @@
+- [Cloudflare Pages deployment](cloudflare-pages-deployment.md) — User confirms Cloudflare Pages CI/CD works; use it for production, separate from Replit preview.
