@@ -10,5 +10,6 @@
 <!-- LOVABLE:END -->
 
 ## Application architecture
-- Keep customer services and operations data behind a typed provider interface that selects local mock data, Lovable Cloud, or a `/api/*` Worker adapter by configuration; this preserves portable Cloudflare/Replit handoff without changing the UI.
+- Keep customer and operations data behind typed interfaces. Use local mock data for development and Cloudflare Workers APIs backed by D1, KV, and R2 in production.
+- Do not add hosted database, authentication, or storage providers outside Cloudflare. Staff operations stay disabled until Cloudflare authentication and authorization are implemented.
 - Keep public destination menus, route content, and category-based detail routes in shared typed modules so every menu entry has a working page.

@@ -3,9 +3,9 @@
 Build the complete web platform and tour operations system for MountainIceMikes Tours & Travel (mountainicemikes.com), built under Migradia Limited.
 
 Architecture & Handoff Readiness:
-- Monorepo-friendly architecture prepared for Cloudflare Pages, D1 (SQLite), R2 (object storage), KV (cache/rates), and Replit backend development.
-- Abstracted API service layer with clean TypeScript interfaces (inquiries, trips, crew assignments, gear inventory) running with rich mock data by default (VITE_USE_MOCK=true) and zero-refactor endpoints pointing to /api/* when connected to Cloudflare Workers.
-- Include schema definitions and mock data mirroring Cloudflare D1 tables (inquiries, trips, crew_assignments, gear_inventory).
+- Cloudflare Pages application using a Cloudflare Worker runtime, D1 (SQLite), KV, and R2.
+- Typed data interfaces use local sample data in development and Cloudflare Worker APIs in production.
+- D1 schema and migrations define inquiries, trips, crew assignments, gear, fleet, and document metadata.
 
 Design & Alpine Aesthetics:
 - Stoic, grounded Mount Kenya expedition aesthetic (inspired by Ahambi Tours and National Geographic Expeditions).
@@ -59,16 +59,6 @@ Migradia Ops Back-End Portal (Protected Admin View):
 - Gear and fleet availability tracker.
 - Document vault for client passports and park permits.
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/3df4a68b-691b-4614-9a76-d136c2e2481c).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
 Prefer working locally? Install [Bun](https://bun.sh), then run:
@@ -77,3 +67,13 @@ Prefer working locally? Install [Bun](https://bun.sh), then run:
 bun install
 bun run dev
 ```
+
+## Cloudflare Pages
+
+- Build command: `bun install --frozen-lockfile && bun run build`
+- Output directory: `dist`
+- Required Pages bindings for public enquiries: D1 database `DB` and KV namespace `RATE_LIMIT`
+- D1 schema: `drizzle/schema.ts`; migration: `drizzle/migrations/0000_initial_d1_schema.sql`
+- Set `VITE_USE_MOCK=true` to use local sample enquiries; production uses the Worker API when this variable is unset.
+
+The `/ops` staff portal is intentionally paused until Cloudflare-based staff authentication and authorization are configured. Private document uploads are also unavailable while it is paused.

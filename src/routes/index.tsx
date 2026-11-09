@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, FileText, HeartHandshake, Menu, Mountain, Phone, ShieldCheck, Tent, Truck, Users, X } from "lucide-react";
 import lenanaPhoto from "@/assets/lenana-alpine-route.jpg";
 import safariPhoto from "@/assets/amboseli-elephant-camp.jpg";
 import crewPhoto from "@/assets/ethical-mountain-crew.jpg";
 import { Button } from "@/components/ui/button";
 import { dayRates, formatPrice, type Currency, type VisitorClass, currencies, tours, tourEstimate } from "@/lib/tours";
-import { supabase } from "@/integrations/supabase/client";
+import { getOpsApi } from "@/lib/ops-api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,16 +34,6 @@ function HomePage() {
   const [conciergeOpen, setConciergeOpen] = useState(false);
   const [inquiryOpen, setInquiryOpen] = useState(false);
   const [toast, setToast] = useState("");
-  const [staffEmail, setStaffEmail] = useState("");
-  const [sessionChecked, setSessionChecked] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setStaffEmail(data.session?.user.email ?? "");
-      setSessionChecked(true);
-    });
-  }, []);
 
   const featuredTours = useMemo(() => tours.filter((tour) => activeService === "All journeys" || tour.service === activeService), [activeService]);
   const curated = tours.find((tour) => tour.slug === "sirimon-chogoria");
@@ -60,18 +50,19 @@ function HomePage() {
   async function submitInquiry(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const response = await supabase.from("inquiries").insert({
-      name: String(formData.get("name") ?? ""),
-      email: String(formData.get("email") ?? ""),
-      phone: String(formData.get("phone") ?? ""),
-      service: String(formData.get("service") ?? "Mount Kenya — Sirimon–Chogoria"),
-      travel_dates: String(formData.get("dates") ?? ""),
-      party_size: Number(formData.get("partySize") ?? 1),
-      nationality: visitorClass,
-      message: String(formData.get("message") ?? ""),
-      source: "website",
-    });
-    if (response.error) {
+    try {
+      await getOpsApi().createInquiry({
+        name: String(formData.get("name") ?? ""),
+        email: String(formData.get("email") ?? ""),
+        phone: String(formData.get("phone") ?? ""),
+        service: String(formData.get("service") ?? "Mount Kenya — Sirimon–Chogoria"),
+        travel_dates: String(formData.get("dates") ?? ""),
+        party_size: Number(formData.get("partySize") ?? 1),
+        nationality: visitorClass,
+        message: String(formData.get("message") ?? ""),
+        source: "website",
+      });
+    } catch {
       alertToast("We couldn’t submit that just now. Please contact us directly.");
       return;
     }
@@ -97,12 +88,11 @@ function HomePage() {
             <select aria-label="Select currency" className="h-9 bg-transparent px-2 text-xs text-primary-foreground" value={currency} onChange={(event) => setCurrency(event.target.value as Currency)}>
               {currencies.map((value) => <option className="text-foreground" key={value}>{value}</option>)}
             </select>
-            {sessionChecked && staffEmail ? <Button variant="outline" className="border-primary-foreground/45 bg-transparent text-primary-foreground hover:bg-primary-foreground/10" onClick={() => void navigate({ to: "/ops" })}>Operations <ArrowUpRight size={14}/></Button> : <Button variant="outline" className="border-primary-foreground/45 bg-transparent text-primary-foreground hover:bg-primary-foreground/10" onClick={() => void navigate({ to: "/ops" })}>Staff access <ArrowUpRight size={14}/></Button>}
             <Button className="bg-accent text-foreground hover:bg-accent/90" onClick={() => setInquiryOpen(true)}>Plan a trip <ArrowRight size={15}/></Button>
           </div>
           <Button variant="ghost" className="size-11 p-0 text-primary-foreground md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X/> : <Menu/>}</Button>
         </div>
-        {menuOpen && <nav className="border-t border-primary-foreground/20 bg-primary p-5 text-sm text-primary-foreground md:hidden"><div className="grid gap-5"><a href="#journeys" onClick={() => setMenuOpen(false)}>Journeys</a><a href="#safari" onClick={() => setMenuOpen(false)}>Safaris</a><a href="#services" onClick={() => setMenuOpen(false)}>Field services</a><a href="#our-team" onClick={() => setMenuOpen(false)}>Our team</a><Button className="bg-accent text-foreground" onClick={() => setInquiryOpen(true)}>Plan a trip <ArrowRight size={15}/></Button><Button variant="outline" className="border-primary-foreground/45 bg-transparent text-primary-foreground" onClick={() => void navigate({ to: "/ops" })}>Staff access</Button></div></nav>}
+        {menuOpen && <nav className="border-t border-primary-foreground/20 bg-primary p-5 text-sm text-primary-foreground md:hidden"><div className="grid gap-5"><a href="#journeys" onClick={() => setMenuOpen(false)}>Journeys</a><a href="#safari" onClick={() => setMenuOpen(false)}>Safaris</a><a href="#services" onClick={() => setMenuOpen(false)}>Field services</a><a href="#our-team" onClick={() => setMenuOpen(false)}>Our team</a><Button className="bg-accent text-foreground" onClick={() => setInquiryOpen(true)}>Plan a trip <ArrowRight size={15}/></Button></div></nav>}
       </header>
 
       <section className="relative isolate min-h-[720px] overflow-hidden bg-primary md:min-h-[820px]">

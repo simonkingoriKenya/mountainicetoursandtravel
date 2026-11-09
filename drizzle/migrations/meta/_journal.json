@@ -1,19 +1,12 @@
 {
   "version": "7",
-  "dialect": "postgresql",
+  "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
-      "version": "7",
-      "when": 1793869527331,
-      "tag": "0000_create_mountainicemikes_operations_data",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1793869987078,
-      "tag": "0001_tighten_operations_permissions",
+      "version": "6",
+      "when": 1794224116185,
+      "tag": "0000_initial_d1_schema",
       "breakpoints": true
     }
   ]
