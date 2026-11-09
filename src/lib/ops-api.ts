@@ -35,8 +35,8 @@ export const mockOpsApi: OpsApi = {
   },
   async updateInquiryStatus(id, status) {
     const rows = loadLocalRows();
-    const index = rows.findIndex((row) => row.id === id);
-    if (index >= 0) { rows[index] = { ...rows[index], status }; saveLocalRows(rows); }
+    const updated = rows.map((row) => row.id === id ? { ...row, status } : row);
+    if (updated.some((row, index) => row !== rows[index])) saveLocalRows(updated);
   },
   async updateTripStatus() {},
   async createInquiry(row) {

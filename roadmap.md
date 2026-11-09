@@ -1,5 +1,5 @@
 # Roadmap
-- [ ] Repair existing preview/type errors without regressing working tours or operations features.
+- [x] Repair existing preview/type errors without regressing working tours or operations features.
 - [ ] Replace homepage navigation with working, mobile-first dropdowns for Mountains, Safaris, Field Services, and About.
 - [ ] Add an About Us page and useful destination pages for the requested mountain and safari menu entries; preserve factual pricing and leave unspecified details unpriced.
 - [ ] Refresh the logo and favicon after confirming the final logo direction.
