@@ -5,3 +5,8 @@ channel = "stable-25_05"
 
 [agent]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+CLOUDFLARE_ACCOUNT_ID = "4a8511d021c1afe4a6b7f14975b73e53"
