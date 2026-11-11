@@ -10,11 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as OpsRouteImport } from './routes/ops'
+import { Route as MountainsIndexRouteImport } from './routes/mountains.index'
+import { Route as MountainsSlugRouteImport } from './routes/mountains.$slug'
+import { Route as SafarisIndexRouteImport } from './routes/safaris.index'
+import { Route as SafarisSlugRouteImport } from './routes/safaris.$slug'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OpsRoute = OpsRouteImport.update({
@@ -22,31 +40,124 @@ const OpsRoute = OpsRouteImport.update({
   path: '/ops',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MountainsIndexRoute = MountainsIndexRouteImport.update({
+  id: '/mountains/',
+  path: '/mountains/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MountainsSlugRoute = MountainsSlugRouteImport.update({
+  id: '/mountains/$slug',
+  path: '/mountains/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafarisIndexRoute = SafarisIndexRouteImport.update({
+  id: '/safaris/',
+  path: '/safaris/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafarisSlugRoute = SafarisSlugRouteImport.update({
+  id: '/safaris/$slug',
+  path: '/safaris/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/services/$slug',
+  path: '/services/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/ops': typeof OpsRoute
+  '/mountains/$slug': typeof MountainsSlugRoute
+  '/safaris/$slug': typeof SafarisSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/mountains/': typeof MountainsIndexRoute
+  '/safaris/': typeof SafarisIndexRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/ops': typeof OpsRoute
+  '/mountains/$slug': typeof MountainsSlugRoute
+  '/safaris/$slug': typeof SafarisSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/mountains': typeof MountainsIndexRoute
+  '/safaris': typeof SafarisIndexRoute
+  '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/ops': typeof OpsRoute
+  '/mountains/$slug': typeof MountainsSlugRoute
+  '/safaris/$slug': typeof SafarisSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/mountains/': typeof MountainsIndexRoute
+  '/safaris/': typeof SafarisIndexRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ops'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/ops'
+    | '/mountains/$slug'
+    | '/safaris/$slug'
+    | '/services/$slug'
+    | '/mountains/'
+    | '/safaris/'
+    | '/services/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ops'
-  id: '__root__' | '/' | '/ops'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/ops'
+    | '/mountains/$slug'
+    | '/safaris/$slug'
+    | '/services/$slug'
+    | '/mountains'
+    | '/safaris'
+    | '/services'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/ops'
+    | '/mountains/$slug'
+    | '/safaris/$slug'
+    | '/services/$slug'
+    | '/mountains/'
+    | '/safaris/'
+    | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
   OpsRoute: typeof OpsRoute
+  MountainsSlugRoute: typeof MountainsSlugRoute
+  SafarisSlugRoute: typeof SafarisSlugRoute
+  ServicesSlugRoute: typeof ServicesSlugRoute
+  MountainsIndexRoute: typeof MountainsIndexRoute
+  SafarisIndexRoute: typeof SafarisIndexRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +169,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ops': {
       id: '/ops'
       path: '/ops'
@@ -65,12 +190,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mountains/': {
+      id: '/mountains/'
+      path: '/mountains'
+      fullPath: '/mountains/'
+      preLoaderRoute: typeof MountainsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mountains/$slug': {
+      id: '/mountains/$slug'
+      path: '/mountains/$slug'
+      fullPath: '/mountains/$slug'
+      preLoaderRoute: typeof MountainsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safaris/': {
+      id: '/safaris/'
+      path: '/safaris'
+      fullPath: '/safaris/'
+      preLoaderRoute: typeof SafarisIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safaris/$slug': {
+      id: '/safaris/$slug'
+      path: '/safaris/$slug'
+      fullPath: '/safaris/$slug'
+      preLoaderRoute: typeof SafarisSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/services/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
   OpsRoute: OpsRoute,
+  MountainsSlugRoute: MountainsSlugRoute,
+  SafarisSlugRoute: SafarisSlugRoute,
+  ServicesSlugRoute: ServicesSlugRoute,
+  MountainsIndexRoute: MountainsIndexRoute,
+  SafarisIndexRoute: SafarisIndexRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -9,7 +9,9 @@ export function PublicPage({ children }: { children: ReactNode }) {
   return <div className="min-h-[100dvh] bg-background text-foreground"><a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-background focus:p-3" href="#main-content">Skip to content</a><PublicHeader /><main id="main-content">{children}</main><PublicFooter /></div>;
 }
 
-export function PageIntro({ eyebrow, title, summary, backTo = "/", backLabel = "Home" }: { eyebrow: string; title: string; summary: string; backTo?: string; backLabel?: string }) {
+type PublicBasePath = "/" | "/mountains" | "/safaris" | "/services";
+
+export function PageIntro({ eyebrow, title, summary, backTo = "/", backLabel = "Home" }: { eyebrow: string; title: string; summary: string; backTo?: PublicBasePath; backLabel?: string }) {
   return <section className="bg-primary px-6 pb-14 pt-12 text-primary-foreground md:px-14 md:pb-20 md:pt-16">
     <div className="mx-auto max-w-[1200px]">
       <nav aria-label="Breadcrumb" className="mb-8 text-[10px] uppercase tracking-[0.12em] text-primary-foreground/70"><Link to="/" className="hover:text-accent">Home</Link><span className="px-2">/</span><Link to={backTo} className="hover:text-accent">{backLabel}</Link><span className="px-2">/</span><span aria-current="page" className="text-primary-foreground">{title}</span></nav>
