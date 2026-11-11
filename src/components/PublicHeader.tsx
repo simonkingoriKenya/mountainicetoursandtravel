@@ -11,11 +11,19 @@ const menus = [
   { title: "Field services", path: "/services", items: fieldServiceMenu },
 ] as const;
 
-const aboutItems = [
-  { title: "About MountainIceMikes", hash: "" },
-  { title: "Our approach & crew welfare", hash: "our-approach" },
-  { title: "Founder & lead guide", hash: "founder" },
-] as const;
+function DestinationMenuLink({ category, slug, children, className, role, onClick }: {
+  category: "mountains" | "safaris" | "services";
+  slug: string;
+  children: React.ReactNode;
+  className?: string;
+  role?: "menuitem";
+  onClick?: () => void;
+}) {
+  const props = { children, className, role, onClick };
+  if (category === "mountains") return <Link to="/mountains/$slug" params={{ slug }} {...props} />;
+  if (category === "safaris") return <Link to="/safaris/$slug" params={{ slug }} {...props} />;
+  return <Link to="/services/$slug" params={{ slug }} {...props} />;
+}
 
 export function PublicHeader({ overlay = false }: { overlay?: boolean }) {
   const location = useLocation();
@@ -70,9 +78,9 @@ export function PublicHeader({ overlay = false }: { overlay?: boolean }) {
                     Explore all {menu.title.toLowerCase()} <span aria-hidden="true">→</span>
                   </Link>
                   {menu.items.map((item) => (
-                    <Link key={item.slug} to={`${menu.path}/${item.slug}`} role="menuitem" className="block px-3 py-2.5 text-xs normal-case transition hover:bg-secondary hover:text-primary" onClick={() => setOpenMenu(null)}>
+                    <DestinationMenuLink key={item.slug} category={menu.path.slice(1) as "mountains" | "safaris" | "services"} slug={item.slug} role="menuitem" className="block px-3 py-2.5 text-xs normal-case transition hover:bg-secondary hover:text-primary" onClick={() => setOpenMenu(null)}>
                       {item.title}
-                    </Link>
+                    </DestinationMenuLink>
                   ))}
                 </div>
               )}
@@ -83,14 +91,16 @@ export function PublicHeader({ overlay = false }: { overlay?: boolean }) {
               About <ChevronDown size={13} aria-hidden="true" />
             </Button>
             {openMenu === "about" && <div className="absolute left-0 top-full z-50 min-w-64 border border-border bg-background p-2 text-foreground shadow-xl" role="menu">
-              {aboutItems.map((item) => <Link key={item.title} to="/about" hash={item.hash || undefined} role="menuitem" className="block px-3 py-2.5 text-xs normal-case transition hover:bg-secondary hover:text-primary" onClick={() => setOpenMenu(null)}>{item.title}</Link>)}
+              <Link to="/about" role="menuitem" className="block px-3 py-2.5 text-xs normal-case transition hover:bg-secondary hover:text-primary" onClick={() => setOpenMenu(null)}>About MountainIceMikes</Link>
+              <Link to="/about" hash="our-approach" role="menuitem" className="block px-3 py-2.5 text-xs normal-case transition hover:bg-secondary hover:text-primary" onClick={() => setOpenMenu(null)}>Our approach & crew welfare</Link>
+              <Link to="/about" hash="founder" role="menuitem" className="block px-3 py-2.5 text-xs normal-case transition hover:bg-secondary hover:text-primary" onClick={() => setOpenMenu(null)}>Founder & lead guide</Link>
             </div>}
           </div>
-          <Link to="/contact" className={`px-3 py-3 transition hover:text-accent ${location.pathname === "/contact" ? "text-accent" : ""}`}>Contact</Link>
+          <Link to="/contact" search={{ service: undefined }} className={`px-3 py-3 transition hover:text-accent ${location.pathname === "/contact" ? "text-accent" : ""}`}>Contact</Link>
         </nav>
 
         <div className="hidden md:block">
-          <Button asChild className="rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact">Plan a trip <ArrowRight size={15} /></Link></Button>
+          <Button asChild className="rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact" search={{ service: undefined }}>Plan a trip <ArrowRight size={15} /></Link></Button>
         </div>
         <Button variant="ghost" className={`size-11 p-0 ${foreground} md:hidden`} aria-label={mobileOpen ? "Close menu" : "Open menu"} aria-expanded={mobileOpen} aria-controls="mobile-navigation" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X /> : <Menu />}
@@ -108,17 +118,17 @@ export function PublicHeader({ overlay = false }: { overlay?: boolean }) {
             </div>
             {mobileCategory === menu.path && <div className="grid gap-1 pb-3 pl-3">
               <Link to={menu.path} className="py-2 text-sm font-semibold text-primary">Explore all {menu.title.toLowerCase()}</Link>
-              {menu.items.map((item) => <Link key={item.slug} to={`${menu.path}/${item.slug}`} className="py-2 text-sm text-muted-foreground">{item.title}</Link>)}
+              {menu.items.map((item) => <DestinationMenuLink key={item.slug} category={menu.path.slice(1) as "mountains" | "safaris" | "services"} slug={item.slug} className="py-2 text-sm text-muted-foreground">{item.title}</DestinationMenuLink>)}
             </div>}
           </div>)}
           <div className="border-b border-border">
             <div className="flex items-center justify-between"><Link to="/about" className="py-3 text-sm uppercase">About</Link>
               <Button type="button" variant="ghost" aria-label="Show About pages" aria-expanded={mobileCategory === "about"} onClick={() => setMobileCategory(mobileCategory === "about" ? null : "about")} className="size-11 p-0"><ChevronDown size={16} className={mobileCategory === "about" ? "rotate-180" : ""} /></Button>
             </div>
-            {mobileCategory === "about" && <div className="grid gap-1 pb-3 pl-3">{aboutItems.map((item) => <Link key={item.title} to="/about" hash={item.hash || undefined} className="py-2 text-sm text-muted-foreground">{item.title}</Link>)}</div>}
+            {mobileCategory === "about" && <div className="grid gap-1 pb-3 pl-3"><Link to="/about" className="py-2 text-sm text-muted-foreground">About MountainIceMikes</Link><Link to="/about" hash="our-approach" className="py-2 text-sm text-muted-foreground">Our approach & crew welfare</Link><Link to="/about" hash="founder" className="py-2 text-sm text-muted-foreground">Founder & lead guide</Link></div>}
           </div>
-          <Link to="/contact" className="py-3 text-sm uppercase">Contact</Link>
-          <Button asChild className="mt-2 rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact">Plan a trip <ArrowRight size={15} /></Link></Button>
+          <Link to="/contact" search={{ service: undefined }} className="py-3 text-sm uppercase">Contact</Link>
+          <Button asChild className="mt-2 rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact" search={{ service: undefined }}>Plan a trip <ArrowRight size={15} /></Link></Button>
         </div>
       </nav>}
     </header>

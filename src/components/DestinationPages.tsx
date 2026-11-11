@@ -11,6 +11,19 @@ import { formatPrice, tours } from "@/lib/tours";
 export type DestinationCategory = "mountains" | "safaris" | "services";
 export type DestinationEntry = { slug: string; title: string };
 
+function DestinationLink({ category, slug, children, className, ariaLabel }: {
+  category: DestinationCategory;
+  slug: string;
+  children: React.ReactNode;
+  className?: string;
+  ariaLabel?: string;
+}) {
+  const props = { children, className, "aria-label": ariaLabel };
+  if (category === "mountains") return <Link to="/mountains/$slug" params={{ slug }} {...props} />;
+  if (category === "safaris") return <Link to="/safaris/$slug" params={{ slug }} {...props} />;
+  return <Link to="/services/$slug" params={{ slug }} {...props} />;
+}
+
 const destinationImages = {
   mountain: { src: lenanaPhoto, alt: "Alpine trail beneath Mount Kenya’s rugged summit range" },
   safari: { src: safariPhoto, alt: "Elephants crossing the Amboseli plains below Kilimanjaro" },
@@ -37,22 +50,22 @@ export function DestinationIndexPage({ category, title, eyebrow, summary, entrie
         {entries.map((entry, index) => {
           const image = destinationImages[category === "mountains" ? "mountain" : category === "safaris" ? "safari" : index % 2 === 0 ? "crew" : "safari"];
           return <article key={entry.slug} className="group flex min-h-full flex-col bg-background">
-            <Link to={`/${category}/$slug`} params={{ slug: entry.slug }} aria-label={`Explore ${entry.title}`} className="block">
+            <DestinationLink category={category} slug={entry.slug} ariaLabel={`Explore ${entry.title}`} className="block">
               <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                 <img src={image.src} alt={image.alt} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
                 <span className="absolute left-3 top-3 bg-background/90 px-2 py-1 text-[10px] uppercase text-foreground">{String(index + 1).padStart(2, "0")} / {category}</span>
               </div>
-            </Link>
+            </DestinationLink>
             <div className="flex flex-1 flex-col p-5 sm:p-6">
               <h2 className="editorial-type text-xl font-semibold leading-snug">{entry.title}</h2>
-              <Link to={`/${category}/$slug`} params={{ slug: entry.slug }} className="mt-auto flex items-center gap-2 pt-6 text-xs font-semibold uppercase text-primary hover:text-accent">Explore details <ArrowUpRight size={15} /></Link>
+              <DestinationLink category={category} slug={entry.slug} className="mt-auto flex items-center gap-2 pt-6 text-xs font-semibold uppercase text-primary hover:text-accent">Explore details <ArrowUpRight size={15} /></DestinationLink>
             </div>
           </article>;
         })}
       </div>
       <div className="mx-auto mt-12 flex max-w-[1200px] flex-col items-start justify-between gap-5 border-t border-border pt-8 sm:flex-row sm:items-center">
         <p className="max-w-xl text-sm leading-6 text-muted-foreground">Not sure where to begin? Share your dates, group and interests with our Nanyuki team.</p>
-        <Button asChild className="rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact">Plan with the team <ArrowRight size={15} /></Link></Button>
+        <Button asChild className="rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact" search={{ service: undefined }}>Plan with the team <ArrowRight size={15} /></Link></Button>
       </div>
     </section>
   </PublicPage>;
@@ -131,7 +144,7 @@ export function AboutPage() {
             <h3 className="editorial-type mt-2 text-2xl font-semibold">Kevin Nderitu</h3>
             <p className="mt-3 text-sm leading-7 text-muted-foreground">An alpine guide and photographer whose experience informs how every trip is planned: with attention to the conditions, the crew and the person taking the first step.</p>
           </div>
-          <Button asChild className="mt-8 w-fit rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact">Talk with our team <ArrowRight size={15} /></Link></Button>
+          <Button asChild className="mt-8 w-fit rounded-none bg-accent text-foreground hover:bg-accent/90"><Link to="/contact" search={{ service: undefined }}>Talk with our team <ArrowRight size={15} /></Link></Button>
         </div>
       </div>
     </section>

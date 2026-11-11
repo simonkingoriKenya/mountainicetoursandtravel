@@ -16,7 +16,7 @@ export function PublicFooter() {
           <Link to="/about" className="mt-3 inline-block underline decoration-accent underline-offset-4 hover:text-accent">Our approach & crew welfare</Link>
         </div>
         <div className="text-xs md:text-right">
-          <Link to="/contact" className="inline-flex items-center gap-2 text-accent">Talk with our team <ArrowUpRight size={14} /></Link>
+          <Link to="/contact" search={{ service: undefined }} className="inline-flex items-center gap-2 text-accent">Talk with our team <ArrowUpRight size={14} /></Link>
           <p className="mt-2 text-background/55">A direct WhatsApp number is awaiting business configuration.</p>
           <p className="mt-4 text-background/55">© {new Date().getFullYear()} MountainIceMikes Tours and Travel</p>
         </div>
