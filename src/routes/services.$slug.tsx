@@ -9,10 +9,10 @@ export const Route = createFileRoute("/services/$slug")({
     return destination;
   },
   head: ({ loaderData }) => ({ meta: [
-    { title: `${loaderData.title} | MountainIceMikes Tours and Travel` },
-    { name: "description", content: loaderData.summary },
-    { property: "og:title", content: `${loaderData.title} | MountainIceMikes` },
-    { property: "og:description", content: loaderData.summary },
+    { title: `${loaderData?.title ?? "Field services"} | MountainIceMikes Tours and Travel` },
+    { name: "description", content: loaderData?.summary ?? "Explore field services with MountainIceMikes." },
+    { property: "og:title", content: `${loaderData?.title ?? "Field services"} | MountainIceMikes` },
+    { property: "og:description", content: loaderData?.summary ?? "Explore field services with MountainIceMikes." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }),
   component: () => <DestinationDetailPage category="services" groupTitle="Field services" destination={Route.useLoaderData()} />,

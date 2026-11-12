@@ -5,7 +5,7 @@ import safariPhoto from "@/assets/amboseli-elephant-camp.jpg";
 import crewPhoto from "@/assets/ethical-mountain-crew.jpg";
 import { Button } from "@/components/ui/button";
 import { EnquiryLink, PageIntro, PublicPage } from "@/components/PublicPage";
-import type { DestinationContent } from "@/lib/site-content";
+import { fieldServicePages, mountainPages, safariPages, type DestinationContent } from "@/lib/site-content";
 import { formatPrice, tours } from "@/lib/tours";
 
 export type DestinationCategory = "mountains" | "safaris" | "services";
@@ -30,6 +30,18 @@ const destinationImages = {
   crew: { src: crewPhoto, alt: "Mountain crew preparing expedition equipment together" },
 } as const;
 
+function contentForEntry(category: DestinationCategory, slug: string): DestinationContent {
+  if (category === "mountains") return mountainPages[slug as keyof typeof mountainPages];
+  if (category === "safaris") return safariPages[slug as keyof typeof safariPages];
+  return fieldServicePages[slug as keyof typeof fieldServicePages];
+}
+
+function imageForTour(image: string) {
+  if (image === "safari") return destinationImages.safari;
+  if (image === "crew") return destinationImages.crew;
+  return destinationImages.mountain;
+}
+
 const categoryPaths: Record<DestinationCategory, "/mountains" | "/safaris" | "/services"> = {
   mountains: "/mountains",
   safaris: "/safaris",
@@ -48,17 +60,24 @@ export function DestinationIndexPage({ category, title, eyebrow, summary, entrie
     <section className="px-5 py-12 sm:px-8 md:px-14 md:py-20">
       <div className="mx-auto grid max-w-[1200px] gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
         {entries.map((entry, index) => {
-          const image = destinationImages[category === "mountains" ? "mountain" : category === "safaris" ? "safari" : index % 2 === 0 ? "crew" : "safari"];
+          const content = contentForEntry(category, entry.slug);
+          const image = destinationImages[content.image];
           return <article key={entry.slug} className="group flex min-h-full flex-col bg-background">
             <DestinationLink category={category} slug={entry.slug} ariaLabel={`Explore ${entry.title}`} className="block">
               <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                 <img src={image.src} alt={image.alt} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
                 <span className="absolute left-3 top-3 bg-background/90 px-2 py-1 text-[10px] uppercase text-foreground">{String(index + 1).padStart(2, "0")} / {category}</span>
+                <span className="absolute bottom-3 right-3 bg-background/90 px-3 py-2 text-[10px] uppercase text-foreground">View journey <ArrowUpRight size={12} className="ml-1 inline" /></span>
               </div>
             </DestinationLink>
             <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <h2 className="editorial-type text-xl font-semibold leading-snug">{entry.title}</h2>
-              <DestinationLink category={category} slug={entry.slug} className="mt-auto flex items-center gap-2 pt-6 text-xs font-semibold uppercase text-primary hover:text-accent">Explore details <ArrowUpRight size={15} /></DestinationLink>
+              <p className="text-[10px] uppercase text-muted-foreground">{content.eyebrow}</p>
+              <h2 className="editorial-type mt-2 text-xl font-semibold leading-snug">{entry.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">{content.summary}</p>
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
+                <DestinationLink category={category} slug={entry.slug} className="flex items-center gap-2 text-xs font-semibold uppercase text-primary hover:text-accent">Explore details <ArrowUpRight size={15} /></DestinationLink>
+                <EnquiryLink service={entry.title} label="Ask the team" className="h-9 px-3 text-xs" />
+              </div>
             </div>
           </article>;
         })}
@@ -108,6 +127,10 @@ export function DestinationDetailPage({ category, groupTitle, destination }: {
         <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-[10px] uppercase text-muted-foreground">Available journeys</p><h2 className="editorial-type mt-2 text-2xl font-semibold">Choose a route to discuss.</h2></div><span className="text-[10px] uppercase text-muted-foreground">Rates shown only when confirmed</span></div>
         <div className="mt-6 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
           {includedTours.map((tour) => <article key={tour.slug} className="bg-background p-5 sm:p-6">
+            <div className="relative mb-4 aspect-[16/10] overflow-hidden bg-secondary">
+              <img src={imageForTour(tour.image).src} alt={imageForTour(tour.image).alt} loading="lazy" className="h-full w-full object-cover" />
+              <span className="absolute bottom-3 left-3 bg-background/90 px-2 py-1 text-[10px] uppercase text-foreground">{tour.days} days · {tour.destination}</span>
+            </div>
             <p className="text-[10px] uppercase text-muted-foreground">{tour.destination} · {tour.days} days{tour.peak ? ` · ${tour.peak}` : ""}</p>
             <h3 className="editorial-type mt-3 text-lg font-semibold">{tour.title}</h3>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">{tour.summary}</p>

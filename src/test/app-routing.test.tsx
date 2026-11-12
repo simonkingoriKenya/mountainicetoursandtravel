@@ -14,4 +14,22 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it.each([
+    "/about",
+    "/mountains",
+    "/mountains/private-treks",
+    "/safaris",
+    "/safaris/kenya-wildlife",
+    "/reviews",
+    "/blog",
+    "/blog/choosing-a-mount-kenya-route",
+    "/contact",
+  ])("matches the navigation destination %s", (path) => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes(path);
+
+    expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
+  });
 });

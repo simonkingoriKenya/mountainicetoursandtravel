@@ -13,6 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as OpsRouteImport } from './routes/ops'
+import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as MountainsIndexRouteImport } from './routes/mountains.index'
 import { Route as MountainsSlugRouteImport } from './routes/mountains.$slug'
 import { Route as SafarisIndexRouteImport } from './routes/safaris.index'
@@ -38,6 +41,21 @@ const ContactRoute = ContactRouteImport.update({
 const OpsRoute = OpsRouteImport.update({
   id: '/ops',
   path: '/ops',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MountainsIndexRoute = MountainsIndexRouteImport.update({
@@ -76,9 +94,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/ops': typeof OpsRoute
+  '/reviews': typeof ReviewsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/mountains/$slug': typeof MountainsSlugRoute
   '/safaris/$slug': typeof SafarisSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/mountains/': typeof MountainsIndexRoute
   '/safaris/': typeof SafarisIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -88,9 +109,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/ops': typeof OpsRoute
+  '/reviews': typeof ReviewsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/mountains/$slug': typeof MountainsSlugRoute
   '/safaris/$slug': typeof SafarisSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/blog': typeof BlogIndexRoute
   '/mountains': typeof MountainsIndexRoute
   '/safaris': typeof SafarisIndexRoute
   '/services': typeof ServicesIndexRoute
@@ -101,9 +125,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/ops': typeof OpsRoute
+  '/reviews': typeof ReviewsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/mountains/$slug': typeof MountainsSlugRoute
   '/safaris/$slug': typeof SafarisSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/mountains/': typeof MountainsIndexRoute
   '/safaris/': typeof SafarisIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -115,9 +142,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/ops'
+    | '/reviews'
+    | '/blog/$slug'
     | '/mountains/$slug'
     | '/safaris/$slug'
     | '/services/$slug'
+    | '/blog/'
     | '/mountains/'
     | '/safaris/'
     | '/services/'
@@ -127,9 +157,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/ops'
+    | '/reviews'
+    | '/blog/$slug'
     | '/mountains/$slug'
     | '/safaris/$slug'
     | '/services/$slug'
+    | '/blog'
     | '/mountains'
     | '/safaris'
     | '/services'
@@ -139,9 +172,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/ops'
+    | '/reviews'
+    | '/blog/$slug'
     | '/mountains/$slug'
     | '/safaris/$slug'
     | '/services/$slug'
+    | '/blog/'
     | '/mountains/'
     | '/safaris/'
     | '/services/'
@@ -152,9 +188,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   OpsRoute: typeof OpsRoute
+  ReviewsRoute: typeof ReviewsRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   MountainsSlugRoute: typeof MountainsSlugRoute
   SafarisSlugRoute: typeof SafarisSlugRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   MountainsIndexRoute: typeof MountainsIndexRoute
   SafarisIndexRoute: typeof SafarisIndexRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
@@ -188,6 +227,27 @@ declare module '@tanstack/react-router' {
       path: '/ops'
       fullPath: '/ops'
       preLoaderRoute: typeof OpsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mountains/': {
@@ -240,9 +300,12 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   OpsRoute: OpsRoute,
+  ReviewsRoute: ReviewsRoute,
+  BlogSlugRoute: BlogSlugRoute,
   MountainsSlugRoute: MountainsSlugRoute,
   SafarisSlugRoute: SafarisSlugRoute,
   ServicesSlugRoute: ServicesSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
   MountainsIndexRoute: MountainsIndexRoute,
   SafarisIndexRoute: SafarisIndexRoute,
   ServicesIndexRoute: ServicesIndexRoute,

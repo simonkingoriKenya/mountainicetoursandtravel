@@ -9,7 +9,7 @@ export function PublicPage({ children }: { children: ReactNode }) {
   return <div className="min-h-[100dvh] bg-background text-foreground"><a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-background focus:p-3" href="#main-content">Skip to content</a><PublicHeader /><main id="main-content">{children}</main><PublicFooter /></div>;
 }
 
-type PublicBasePath = "/" | "/mountains" | "/safaris" | "/services";
+type PublicBasePath = "/" | "/mountains" | "/safaris" | "/services" | "/blog" | "/reviews";
 
 export function PageIntro({ eyebrow, title, summary, backTo = "/", backLabel = "Home" }: { eyebrow: string; title: string; summary: string; backTo?: PublicBasePath; backLabel?: string }) {
   return <section className="bg-primary px-6 pb-14 pt-12 text-primary-foreground md:px-14 md:pb-20 md:pt-16">
