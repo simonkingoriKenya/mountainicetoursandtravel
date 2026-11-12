@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, FileText, HeartHandshake, Menu, Mountain, Phone, ShieldCheck, Tent, Truck, Users, X } from "lucide-react";
+import type { ReactNode } from "react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Compass, FileText, HeartHandshake, Mountain, Phone, ShieldCheck, Tent, Truck, Users, X } from "lucide-react";
 import lenanaPhoto from "@/assets/lenana-alpine-route.jpg";
 import safariPhoto from "@/assets/amboseli-elephant-camp.jpg";
 import crewPhoto from "@/assets/ethical-mountain-crew.jpg";
-import ridgeBadge from "@/assets/mountainicemikes-logo-ridge-badge.png";
 import { Button } from "@/components/ui/button";
-import { dayRates, formatPrice, type Currency, type VisitorClass, currencies, tours, tourEstimate } from "@/lib/tours";
+import { PublicHeader } from "@/components/PublicHeader";
+import { PublicFooter } from "@/components/PublicFooter";
+import { dayRates, formatPrice, type Currency, type Tour, type VisitorClass, currencies, tours, tourEstimate } from "@/lib/tours";
 import { getOpsApi } from "@/lib/ops-api";
 
 export const Route = createFileRoute("/")({
@@ -23,6 +25,28 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
+function TourCardLink({ tour, children, className }: { tour: Tour; children: ReactNode; className?: string }) {
+  if (tour.service === "Mountain") {
+    const slug = tour.slug === "batian-nelion"
+      ? "batian-nelion"
+      : ["machame", "lemosho", "marangu"].includes(tour.slug)
+        ? "kilimanjaro"
+        : "private-treks";
+    return <Link to="/mountains/$slug" params={{ slug }} className={className}>{children}</Link>;
+  }
+  if (tour.service === "Safari") {
+    const slug = tour.slug === "northern-circuit" ? "northern-kenya" : "kenya-wildlife";
+    return <Link to="/safaris/$slug" params={{ slug }} className={className}>{children}</Link>;
+  }
+  return <Link to="/services/$slug" params={{ slug: "team-hikes" }} className={className}>{children}</Link>;
+}
+
+function tourImage(image: Tour["image"]) {
+  if (image === "safari") return { src: safariPhoto, alt: "Elephants on the Amboseli plains beneath Kilimanjaro" };
+  if (image === "crew") return { src: crewPhoto, alt: "Mountain crew preparing equipment for an expedition" };
+  return { src: lenanaPhoto, alt: "High-altitude trail on Mount Kenya" };
+}
+
 function HomePage() {
   const [currency, setCurrency] = useState<Currency>("USD");
   const [visitorClass, setVisitorClass] = useState<VisitorClass>("non_resident");
@@ -31,7 +55,6 @@ function HomePage() {
   const [selectedGear, setSelectedGear] = useState(2);
   const [rentQuantity, setRentQuantity] = useState(1);
   const [activeService, setActiveService] = useState("All journeys");
-  const [menuOpen, setMenuOpen] = useState(false);
   const [conciergeOpen, setConciergeOpen] = useState(false);
   const [inquiryOpen, setInquiryOpen] = useState(false);
   const [toast, setToast] = useState("");
@@ -73,27 +96,7 @@ function HomePage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <header className="absolute inset-x-0 top-0 z-40 border-b border-primary-foreground/20 text-primary-foreground">
-        <div className="mx-auto flex h-24 max-w-[1440px] items-center justify-between px-5 md:px-10">
-          <Link to="/" className="flex items-center gap-3" aria-label="MountainIceMikes Tours and Travel home">
-            <img src={ridgeBadge} alt="" width={1200} height={912} className="h-[88px] w-[116px] object-contain"/>
-          </Link>
-          <nav className="hidden items-center gap-7 text-xs uppercase md:flex">
-            <a href="#journeys" className="transition hover:text-accent">Journeys</a>
-            <a href="#safari" className="transition hover:text-accent">Safaris</a>
-            <a href="#services" className="transition hover:text-accent">Field services</a>
-            <a href="#our-team" className="transition hover:text-accent">Our team</a>
-          </nav>
-          <div className="hidden items-center gap-3 md:flex">
-            <select aria-label="Select currency" className="h-9 bg-transparent px-2 text-xs text-primary-foreground" value={currency} onChange={(event) => setCurrency(event.target.value as Currency)}>
-              {currencies.map((value) => <option className="text-foreground" key={value}>{value}</option>)}
-            </select>
-            <Button className="bg-accent text-foreground hover:bg-accent/90" onClick={() => setInquiryOpen(true)}>Plan a trip <ArrowRight size={15}/></Button>
-          </div>
-          <Button variant="ghost" className="size-11 p-0 text-primary-foreground md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X/> : <Menu/>}</Button>
-        </div>
-        {menuOpen && <nav className="border-t border-primary-foreground/20 bg-primary p-5 text-sm text-primary-foreground md:hidden"><div className="grid gap-5"><a href="#journeys" onClick={() => setMenuOpen(false)}>Journeys</a><a href="#safari" onClick={() => setMenuOpen(false)}>Safaris</a><a href="#services" onClick={() => setMenuOpen(false)}>Field services</a><a href="#our-team" onClick={() => setMenuOpen(false)}>Our team</a><Button className="bg-accent text-foreground" onClick={() => setInquiryOpen(true)}>Plan a trip <ArrowRight size={15}/></Button></div></nav>}
-      </header>
+      <PublicHeader overlay />
 
       <section className="relative isolate min-h-[720px] overflow-hidden bg-primary md:min-h-[820px]">
         <img src={lenanaPhoto} alt="High mountain path below Mount Kenya’s rugged summit range" width={1920} height={1280} fetchPriority="high" className="absolute inset-0 -z-20 h-full w-full object-cover object-center"/>
@@ -122,11 +125,17 @@ function HomePage() {
           </div>
           <div className="mt-12 grid gap-0 border-t border-border sm:grid-cols-2 lg:grid-cols-3">
             {featuredTours.map((tour, index) => <article key={tour.slug} className="group flex flex-col border-b border-border py-7 sm:px-5 lg:px-7">
-              <div className="flex items-center justify-between text-[10px] uppercase text-muted-foreground"><span>{String(index + 1).padStart(2, "0")} / {tour.destination}</span><span>{tour.service}</span></div>
-              <h3 className="editorial-type mt-5 min-h-14 text-xl font-semibold leading-snug">{tour.title}</h3>
+              <TourCardLink tour={tour} className="block overflow-hidden">
+                <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+                  <img src={tourImage(tour.image).src} alt={tourImage(tour.image).alt} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]" />
+                  <span className="absolute left-3 top-3 bg-background/90 px-2 py-1 text-[10px] uppercase text-foreground">{tour.destination} · {tour.days} days</span>
+                </div>
+                <div className="mt-5 flex items-center justify-between text-[10px] uppercase text-muted-foreground"><span>{String(index + 1).padStart(2, "0")} / {tour.destination}</span><span>{tour.service}</span></div>
+                <h3 className="editorial-type mt-2 min-h-14 text-xl font-semibold leading-snug transition group-hover:text-primary">{tour.title}</h3>
+              </TourCardLink>
               <p className="mt-3 min-h-12 text-sm leading-6 text-muted-foreground">{tour.summary}</p>
               <div className="mt-5 flex items-center gap-4 text-[10px] uppercase text-muted-foreground"><span>{tour.days} days</span>{tour.peak && <><span>·</span><span>{tour.peak}</span></>}</div>
-              <div className="mt-5 flex items-center justify-between border-t border-border pt-4"><p className="text-sm font-semibold">{tour.startingUsd > 0 ? <>{formatPrice(tour.startingUsd, currency)}<span className="ml-1 text-[10px] font-normal text-muted-foreground">/ person · from</span></> : <span className="text-muted-foreground">Tailored quote</span>}{tour.highestUsd && <span className="ml-1 text-[10px] font-normal text-muted-foreground">— {formatPrice(tour.highestUsd, currency)}</span>}</p><Button variant="ghost" size="icon" aria-label={`Ask about ${tour.title}`} title={`Ask about ${tour.title}`} className="shrink-0" onClick={() => { setInquiryOpen(true); }}><ArrowUpRight size={17}/></Button></div>
+              <div className="mt-5 flex items-center justify-between border-t border-border pt-4"><p className="text-sm font-semibold">{tour.startingUsd > 0 ? <>{formatPrice(tour.startingUsd, currency)}<span className="ml-1 text-[10px] font-normal text-muted-foreground">/ person · from</span></> : <span className="text-muted-foreground">Tailored quote</span>}{tour.highestUsd && <span className="ml-1 text-[10px] font-normal text-muted-foreground">— {formatPrice(tour.highestUsd, currency)}</span>}</p><Button variant="ghost" size="sm" asChild className="shrink-0 uppercase"><Link to="/contact" search={{ service: `${tour.destination} — ${tour.title}` }}>Enquire <ArrowUpRight size={15}/></Link></Button></div>
             </article>)}
           </div>
           <div className="mt-12 grid gap-10 border-t border-border pt-8 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
@@ -170,7 +179,7 @@ function HomePage() {
 
       <section className="px-6 py-16 md:px-14 md:py-24"><div className="mx-auto grid max-w-[1320px] gap-10 md:grid-cols-[.75fr_1.25fr] md:items-center"><div><p className="text-[11px] uppercase text-muted-foreground">A note from the field</p><p className="editorial-type mt-5 text-3xl leading-snug">“A good trip leaves you with more than a photograph. It leaves the mountain, and the people on it, looked after.”</p><p className="mt-5 text-[11px] uppercase text-primary">— MountainIceMikes field team</p></div><div className="grid gap-px bg-border sm:grid-cols-3"><div className="bg-background p-6"><p className="editorial-type text-2xl font-semibold">9+</p><p className="mt-2 text-xs text-muted-foreground">years guiding and photographing</p></div><div className="bg-background p-6"><p className="editorial-type text-2xl font-semibold">Local</p><p className="mt-2 text-xs text-muted-foreground">mountain crew on every climb</p></div><div className="bg-background p-6"><p className="editorial-type text-2xl font-semibold">KWS</p><p className="mt-2 text-xs text-muted-foreground">route and park planning considered</p></div></div></div></section>
 
-      <footer className="bg-foreground px-6 py-12 text-background md:px-14"><div className="mx-auto grid max-w-[1320px] gap-8 md:grid-cols-3 md:items-end"><div><Link to="/" aria-label="MountainIceMikes Tours and Travel home"><img src={ridgeBadge} alt="MountainIceMikes Tours and Travel" width={1200} height={912} className="h-auto w-[148px] object-contain"/></Link><p className="mt-3 max-w-sm text-xs leading-5 text-background/65">Kenya journeys made thoughtfully, from the mountain up.</p></div><div className="text-xs text-background/75"><p className="uppercase text-background">Migradia Limited</p><p className="mt-2">Nanyuki · Kenya</p><button onClick={() => setConciergeOpen(true)} className="mt-2 flex items-center gap-2 text-background underline decoration-accent underline-offset-4"><Phone size={13}/> Talk with our team</button></div><div className="text-xs md:text-right"><a href="https://wa.me/?text=Hello%20MountainIceMikes%2C%20I%E2%80%99d%20like%20to%20plan%20a%20trip%20in%20Kenya." target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-accent">WhatsApp concierge <ArrowUpRight size={14}/></a><p className="mt-4 text-background/55">© {new Date().getFullYear()} MountainIceMikes Tours and Travel</p></div></div></footer>
+      <PublicFooter />
 
       <div className="fixed bottom-5 right-5 z-40"><Button aria-label={conciergeOpen ? "Close WhatsApp concierge" : "Open WhatsApp concierge"} title="WhatsApp concierge" className="size-14 rounded-full border-2 border-background bg-primary p-0 text-primary-foreground shadow-lg hover:bg-secondary" onClick={() => setConciergeOpen(!conciergeOpen)}>{conciergeOpen ? <X size={22}/> : <Phone size={20}/>}</Button></div>
       {conciergeOpen && <div className="fixed bottom-24 right-5 z-50 w-[min(360px,calc(100vw-2rem))] border border-border bg-background shadow-xl"><div className="flex items-center justify-between bg-primary px-5 py-4 text-primary-foreground"><div><span className="text-sm font-semibold">Field desk · MountainIceMikes</span><p className="mt-1 text-[10px] text-primary-foreground/70">Nanyuki · East Africa / UTC+3</p></div><Button size="icon" variant="ghost" aria-label="Close concierge" className="text-primary-foreground" onClick={() => setConciergeOpen(false)}><X size={17}/></Button></div><div className="p-5"><p className="text-sm leading-6">Tell us where you’re headed, your dates and the size of your group.</p><a className="mt-5 flex h-11 items-center justify-center gap-2 bg-accent text-sm font-medium text-accent-foreground" href="https://wa.me/?text=Hello%20MountainIceMikes%2C%20I%E2%80%99d%20like%20to%20plan%20a%20trip%20in%20Kenya." target="_blank" rel="noreferrer">Open WhatsApp <ArrowUpRight size={15}/></a><Button variant="outline" className="mt-2 w-full rounded-none" onClick={() => setInquiryOpen(true)}>Send a written enquiry <ArrowRight size={14}/></Button></div></div>}

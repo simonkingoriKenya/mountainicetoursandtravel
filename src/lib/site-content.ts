@@ -1,18 +1,17 @@
 export const mountainMenu = [
-  { slug: "private-treks", title: "Mountain private trek" },
-  { slug: "group-treks", title: "Mountain group treks" },
-  { slug: "batian-nelion", title: "Batian & Nelion climbing" },
-  { slug: "kilimanjaro", title: "Climbing Kilimanjaro" },
-  { slug: "kenya-day-trip", title: "Kenya day trip" },
-  { slug: "mount-elgon", title: "Climbing Mount Elgon" },
-  { slug: "mount-kenya-flight", title: "Mount Kenya flight tour" },
+  { slug: "private-treks", title: "Mount Kenya Private Treks" },
+  { slug: "group-treks", title: "Mount Kenya Group Departures" },
+  { slug: "batian-nelion", title: "Technical Climbing — Batian & Nelion" },
+  { slug: "kilimanjaro", title: "Climb Kilimanjaro" },
+  { slug: "mount-elgon", title: "Mount Elgon Trek" },
+  { slug: "kenya-day-trip", title: "Mount Kenya Day Hike" },
 ] as const;
 
 export const safariMenu = [
-  { slug: "kenya-wildlife", title: "Kenya wildlife safaris" },
-  { slug: "northern-kenya", title: "Northern Kenya safaris" },
-  { slug: "kenya-day-trip", title: "Kenya day trip safaris" },
-  { slug: "tanzania-wildlife", title: "Tanzania wildlife safaris" },
+  { slug: "kenya-wildlife", title: "Kenya Wildlife Safaris" },
+  { slug: "northern-kenya", title: "Northern Kenya Safaris" },
+  { slug: "tanzania-wildlife", title: "Tanzania Wildlife Safaris" },
+  { slug: "kenya-day-trip", title: "Kenya Day Trip Safaris" },
 ] as const;
 
 export const fieldServiceMenu = [
@@ -35,7 +34,7 @@ export type DestinationContent = {
 
 export const mountainPages = {
   "private-treks": {
-    title: "Mountain private trek",
+    title: "Mount Kenya Private Treks",
     eyebrow: "Mount Kenya · Kilimanjaro · Meru",
     summary: "A mountain journey planned around your group, dates and pace.",
     overview: "Choose from established routes on Mount Kenya, Kilimanjaro and Mount Meru. The team can shape a private plan around your experience and the conditions; final route details and park charges are confirmed before booking.",
@@ -44,7 +43,7 @@ export const mountainPages = {
     tourSlugs: ["sirimon-chogoria", "naro-moru", "machame", "lemosho", "meru"],
   },
   "group-treks": {
-    title: "Mountain group treks",
+    title: "Mount Kenya Group Departures",
     eyebrow: "Shared trail · Local mountain crew",
     summary: "Explore mountain routes with a group and experienced local support.",
     overview: "Mount Kenya and Kilimanjaro routes can be discussed for group travel. Share your preferred dates, group size and experience so the team can confirm an appropriate option and availability.",
@@ -53,7 +52,7 @@ export const mountainPages = {
     tourSlugs: ["sirimon-chogoria", "naro-moru", "machame", "lemosho"],
   },
   "batian-nelion": {
-    title: "Batian & Nelion climbing",
+    title: "Technical Climbing — Batian & Nelion",
     eyebrow: "Mount Kenya · Technical objectives",
     summary: "Technical climbing logistics shaped around experience, conditions and route availability.",
     overview: "Batian and Nelion are technical climbing objectives on Mount Kenya. The team discusses experience, intended route, conditions and logistics before confirming a plan; this is not a standard trekking itinerary.",
@@ -62,7 +61,7 @@ export const mountainPages = {
     tourSlugs: ["batian-nelion"],
   },
   kilimanjaro: {
-    title: "Climbing Kilimanjaro",
+    title: "Climb Kilimanjaro",
     eyebrow: "Tanzania · 5,895 m ASL",
     summary: "Compare the Machame, Lemosho and Marangu routes before choosing your climb.",
     overview: "Choose among the listed Machame, Lemosho and Marangu climbs. Confirmed starting prices are shown for Machame and Lemosho; Marangu and any final inclusions are quoted by the team.",
@@ -71,7 +70,7 @@ export const mountainPages = {
     tourSlugs: ["machame", "lemosho", "marangu"],
   },
   "kenya-day-trip": {
-    title: "Kenya day trip",
+    title: "Mount Kenya Day Hike",
     eyebrow: "Day walks · Kenya",
     summary: "A guided day outdoors, from a conditioning hike to a tailored local outing.",
     overview: "Ask about day outings such as Elephant Hill and Mount Longonot, or share your preferred area and pace. The team will confirm the route, dates, access and quote for your group.",
@@ -80,7 +79,7 @@ export const mountainPages = {
     tourSlugs: ["corporate-hike"],
   },
   "mount-elgon": {
-    title: "Climbing Mount Elgon",
+    title: "Mount Elgon Trek",
     eyebrow: "East Africa · Mountain trek",
     summary: "Discuss a Mount Elgon trek with the team before settling the route and dates.",
     overview: "Tell us your preferred dates, group size and experience. Route details, access, permits and availability are confirmed with the team before a Mount Elgon plan is quoted.",
@@ -97,11 +96,13 @@ export const mountainPages = {
     highlights: ["Flight availability confirmed for your dates", "Operator and route details confirmed before booking", "Weather-dependent planning"],
     tourSlugs: [],
   },
-} satisfies Record<(typeof mountainMenu)[number]["slug"], DestinationContent>;
+} satisfies Record<(typeof mountainMenu)[number]["slug"], DestinationContent> & {
+  "mount-kenya-flight": DestinationContent;
+};
 
 export const safariPages = {
   "kenya-wildlife": {
-    title: "Kenya wildlife safaris",
+    title: "Kenya Wildlife Safaris",
     eyebrow: "Maasai Mara · Amboseli · Rift Valley",
     summary: "Wildlife journeys through Kenya’s varied landscapes, planned around your dates.",
     overview: "Explore the Maasai Mara, Amboseli, Lake Nakuru and Lake Naivasha. Safari duration, seasonal conditions, park access and final pricing are confirmed for your travel dates.",
@@ -110,7 +111,7 @@ export const safariPages = {
     tourSlugs: ["mara-3", "mara-5", "amboseli", "rift-valley"],
   },
   "northern-kenya": {
-    title: "Northern Kenya safaris",
+    title: "Northern Kenya Safaris",
     eyebrow: "Ol Pejeta · Samburu",
     summary: "A northern circuit connecting two distinct Kenyan wildlife landscapes.",
     overview: "The listed Ol Pejeta and Samburu circuit combines Kenya’s highlands and northern frontier. Ask the team to confirm the route, dates, inclusions and quote for your group.",
@@ -119,7 +120,7 @@ export const safariPages = {
     tourSlugs: ["northern-circuit"],
   },
   "kenya-day-trip": {
-    title: "Kenya day trip safaris",
+    title: "Kenya Day Trip Safaris",
     eyebrow: "Wildlife · One day at a time",
     summary: "Ask about a short wildlife outing from your starting point in Kenya.",
     overview: "Share your departure point, dates and interests to discuss a Kenya day-trip safari. Park choice, travel time, access, availability and pricing depend on the location and are confirmed by the team.",
@@ -128,7 +129,7 @@ export const safariPages = {
     tourSlugs: [],
   },
   "tanzania-wildlife": {
-    title: "Tanzania wildlife safaris",
+    title: "Tanzania Wildlife Safaris",
     eyebrow: "Tanzania · Wildlife journeys",
     summary: "Plan a Tanzania safari around your travel dates and wildlife interests.",
     overview: "Tell the team which areas interest you, when you plan to travel and how long you have. Park selection, itinerary, availability and pricing are confirmed before a booking is made.",
