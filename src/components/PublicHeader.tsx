@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
-import trekLogo from "@/assets/mountainicemikes-logo.png.asset.json";
+import ridgeBadge from "@/assets/mountainicemikes-logo-ridge-badge.png";
 import { Button } from "@/components/ui/button";
-import { mountainMenu, safariMenu } from "@/lib/site-content";
+import { fieldServiceMenu, mountainMenu, safariMenu } from "@/lib/site-content";
 
 const menus = [
   { title: "Mountains", path: "/mountains", items: mountainMenu },
   { title: "Safaris", path: "/safaris", items: safariMenu },
+  { title: "Field Services", path: "/services", items: fieldServiceMenu },
 ] as const;
 
 function DestinationMenuLink({ category, slug, children, className, role, onClick }: {
@@ -54,7 +55,7 @@ export function PublicHeader({ overlay = false }: { overlay?: boolean }) {
     <header className={`${overlay ? "absolute inset-x-0 top-0 z-40 border-b border-primary-foreground/20" : "relative z-40 border-b border-border bg-background"} ${foreground}`}>
       <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 md:h-24 md:px-10">
         <Link to="/" className="flex shrink-0 items-center" aria-label="MountainIceMikes Tours and Travel home">
-          <img src={trekLogo.url} alt="MountainIceMikes Tours and Travel" width={1200} height={912} className="h-[68px] w-[90px] object-contain md:h-[84px] md:w-[110px]" />
+          <img src={ridgeBadge} alt="MountainIceMikes Tours and Travel" width={1200} height={912} className="h-[68px] w-[90px] object-contain md:h-[84px] md:w-[110px]" />
         </Link>
 
         <nav aria-label="Main navigation" className="hidden items-center gap-0 text-[10px] uppercase xl:flex">
